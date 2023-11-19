@@ -1,4 +1,7 @@
-﻿namespace LiteValidation;
+﻿using LiteValidation.Contracts;
+using LiteValidation.Extensions;
+
+namespace LiteValidation.Extensions;
 
 public static class LiteValidatorRuleOptionsExtension
 {
@@ -18,7 +21,7 @@ public static class LiteValidatorRuleOptionsExtension
         return builder;
     }
 
-    public static ILiteValidatorRuleOptions<T> NotNull<T, P>(this ILiteValidatorRuleOptions<T> builder, Func<T, P?> value) where P : class
+    public static ILiteValidatorRuleOptions<T> NotNull<T, P>(this ILiteValidatorRuleOptions<T> builder, Func<T, P> value) where P : class
     {
         builder.Must(x => value(x) is not null);
         return builder;

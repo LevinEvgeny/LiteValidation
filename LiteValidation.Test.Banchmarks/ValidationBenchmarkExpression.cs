@@ -1,23 +1,24 @@
 ﻿using BenchmarkDotNet.Attributes;
-using LiteValidation.Contracts;
-using LiteValidation.Extensions;
 using Tests;
+using LiteValidationExpression;
+using LiteValidation.Contracts;
+using LiteValidationExpression.Extensions;
 
 namespace LiteValidation.Test.Banchmarks;
 
 [MemoryDiagnoser]
 [RankColumn]
 //[SimpleJob(launchCount: 1, warmupCount: 10, iterationCount: 300)]
-public class ValidationBenchmark
+public class ValidationBenchmarkExpression
 {
     static TestObject TestObj = new TestObject();
     static ILiteValidatorBuilderForType<TestObject> liteValidatorTestObjectForType;
     static ILiteValidatorBuilderForValue<TestObject> liteValidatorTestObjectForValue;
-    static LiteValidatorRuleOptions<TestObject> liteValidatorRuleOptions;
+    static LiteValidatorExpressionRuleOptions<TestObject> liteValidatorRuleOptions;
 
-    public ValidationBenchmark()
+    public ValidationBenchmarkExpression()
     {
-        liteValidatorRuleOptions = new LiteValidatorRuleOptions<TestObject>(RuleCheckTypeEnum.CheckAll, x => x
+        liteValidatorRuleOptions = new LiteValidatorExpressionRuleOptions<TestObject>(RuleCheckTypeEnum.CheckAll, x => x
             .NotNull()
             .NotNull(x => x.Text1)
             .Must(x => x.Text1.Contains('a', StringComparison.InvariantCultureIgnoreCase))
@@ -49,12 +50,12 @@ public class ValidationBenchmark
             .Must(x => x.StructCollection.Count <= 10)
             .UseException(() => new Exception("sdf")));
         #endregion
-        liteValidatorTestObjectForType = LiteValidator.RuleFor<TestObject>(liteValidatorRuleOptions);
-        liteValidatorTestObjectForValue = LiteValidator.RuleFor(TestObj, liteValidatorRuleOptions);
+        liteValidatorTestObjectForType = LiteValidatorExpression.RuleFor<TestObject>(liteValidatorRuleOptions);
+        liteValidatorTestObjectForValue = LiteValidatorExpression.RuleFor(TestObj, liteValidatorRuleOptions);
     }
 
     [Benchmark]
-    public void Test_If()
+    public void TestIf_AllRulesInOneFunc_1()
     {
         if (TestObj is not null
             && TestObj.Text1 is not null
@@ -92,19 +93,19 @@ public class ValidationBenchmark
     }
 
     [Benchmark]
-    public void Test_LiteValidator_ForValue_AllRulesInOneFunc()
+    public void TestLiteValidatorForValue_AllRulesInOneFunc()
     {
-        LiteValidator.RuleFor(TestObj, RuleCheckTypeEnum.CheckAll, x => x
-            .Must( x => x != null
-                     && x.Text1 is not null
+        LiteValidatorExpression.RuleFor(TestObj, RuleCheckTypeEnum.CheckAll,
+            x => x .Must( x => x != null
+                     && x.Text1 != null
                      && x.Text1.Contains('a', StringComparison.InvariantCultureIgnoreCase)
-                     && x.Text2 is not null
+                     && x.Text2 != null
                      && x.Text2.Contains('b', StringComparison.InvariantCultureIgnoreCase)
-                     && x.Text3 is not null
+                     && x.Text3 != null
                      && x.Text3.Contains('c', StringComparison.InvariantCultureIgnoreCase)
-                     && x.Text4 is not null
+                     && x.Text4 != null
                      && x.Text4.Contains('d', StringComparison.InvariantCultureIgnoreCase)
-                     && x.Text5 is not null
+                     && x.Text5 != null
                      && x.Text5.Contains('e', StringComparison.InvariantCultureIgnoreCase)
                      && x.Number1 < 10
                      && x.Number2 < 10
@@ -128,9 +129,9 @@ public class ValidationBenchmark
     }
 
     [Benchmark]
-    public void Test_LiteValidator_ForValue_AllRulesInDifFunc()
+    public void TestLiteValidatorForValue_AllRulesInDifFunc()
     {
-        LiteValidator.RuleFor(TestObj, RuleCheckTypeEnum.CheckAll, x => x
+        LiteValidatorExpression.RuleFor(TestObj, RuleCheckTypeEnum.CheckAll, x => x
             .NotNull()
             .NotNull(x => x.Text1)
             .Must(x => x.Text1.Contains('a', StringComparison.InvariantCultureIgnoreCase))
@@ -166,7 +167,7 @@ public class ValidationBenchmark
     [Benchmark]
     public void TestLiteValidatorForValue_WithOptionsSingleInstance()
     {
-        LiteValidator.RuleFor(TestObj, liteValidatorRuleOptions).Check();
+        LiteValidatorExpression.RuleFor(TestObj, liteValidatorRuleOptions).Check();
     }
 
     [Benchmark]

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteValidation", "LiteValidation\LiteValidation.csproj", "{3C02BC1E-C42F-4242-8B49-470173FD35B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteValidation", "LiteValidation\LiteValidation.csproj", "{3C02BC1E-C42F-4242-8B49-470173FD35B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteValidation.Test.Banchmarks", "LiteValidation.Test.Banchmarks\LiteValidation.Test.Banchmarks.csproj", "{AF8CCD8A-A37F-4ED7-A770-6E868DECD843}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteValidation.Test.Banchmarks", "LiteValidation.Test.Banchmarks\LiteValidation.Test.Banchmarks.csproj", "{AF8CCD8A-A37F-4ED7-A770-6E868DECD843}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteValidationExpression", "LiteValidationExpression\LiteValidationExpression.csproj", "{6A6972AC-299F-484D-9953-BB2FD9A63853}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AF8CCD8A-A37F-4ED7-A770-6E868DECD843}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF8CCD8A-A37F-4ED7-A770-6E868DECD843}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF8CCD8A-A37F-4ED7-A770-6E868DECD843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A6972AC-299F-484D-9953-BB2FD9A63853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A6972AC-299F-484D-9953-BB2FD9A63853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A6972AC-299F-484D-9953-BB2FD9A63853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A6972AC-299F-484D-9953-BB2FD9A63853}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

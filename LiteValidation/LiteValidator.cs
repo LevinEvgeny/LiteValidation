@@ -1,10 +1,12 @@
-﻿namespace LiteValidation;
+﻿using LiteValidation.Contracts;
+
+namespace LiteValidation;
 
 public static class LiteValidator
 {
-    public static ILiteValidatorBuilderForType<T> RuleFor<T>(Func<ILiteValidatorRuleOptions<T>, ILiteValidatorRuleOptions<T>> getOptions)
+    public static ILiteValidatorBuilderForType<T> RuleFor<T>(RuleCheckTypeEnum ruleCheckType, Func<ILiteValidatorRuleOptions<T>, ILiteValidatorRuleOptions<T>> getOptions)
     {
-        var options = new LiteValidatorRuleOptions<T>();
+        var options = new LiteValidatorRuleOptions<T>(ruleCheckType);
         getOptions(options);
         return new LiteValidatorBuilder<T>(options);
     }
@@ -14,9 +16,9 @@ public static class LiteValidator
         return new LiteValidatorBuilder<T>(options);
     }
 
-    public static ILiteValidatorBuilderForValue<T> RuleFor<T>(T value, Func<ILiteValidatorRuleOptions<T>, ILiteValidatorRuleOptions<T>> getOptions)
+    public static ILiteValidatorBuilderForValue<T> RuleFor<T>(T value, RuleCheckTypeEnum ruleCheckType, Func<ILiteValidatorRuleOptions<T>, ILiteValidatorRuleOptions<T>> getOptions)
     {
-        var options = new LiteValidatorRuleOptions<T>();
+        var options = new LiteValidatorRuleOptions<T>(ruleCheckType);
         getOptions(options);
         return new LiteValidatorBuilder<T>(value, options);
     }

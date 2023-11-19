@@ -1,28 +1,30 @@
-﻿namespace LiteValidation;
+﻿using LiteValidation.Contracts;
 
-internal class LiteValidatorBuilder<T> : ILiteValidatorBuilderForType<T>, ILiteValidatorBuilderForValue<T>
+namespace LiteValidation;
+
+public class LiteValidatorBuilder<T> : ILiteValidatorBuilderForType<T>, ILiteValidatorBuilderForValue<T>
 {
     private T _value;
-    private readonly LiteValidatorRuleOptions<T> _options;
+    private readonly ILiteValidatorRuleCheck<T> _rules;
 
-    public LiteValidatorBuilder(LiteValidatorRuleOptions<T> options)
+    public LiteValidatorBuilder(ILiteValidatorRuleCheck<T> rules)
     {
-        _options = options;
+        _rules = rules;
     }
 
-    public LiteValidatorBuilder(T value, LiteValidatorRuleOptions<T> options)
+    public LiteValidatorBuilder(T value, ILiteValidatorRuleCheck<T> rules)
     {
         _value = value;
-        _options = options;
+        _rules = rules;
     }
 
     public void Check()
     {
-        _options.GetRuleCheck(_value);
+        _rules.RuleCheck(_value);
     }
 
     public void Check(T value)
     {
-        _options.GetRuleCheck(value);
+        _rules.RuleCheck(value);
     }
 }

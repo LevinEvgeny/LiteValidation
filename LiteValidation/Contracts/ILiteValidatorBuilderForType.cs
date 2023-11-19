@@ -1,4 +1,4 @@
-﻿namespace LiteValidation;
+﻿namespace LiteValidation.Contracts;
 
 public interface ILiteValidatorBuilderForType<T>
 {

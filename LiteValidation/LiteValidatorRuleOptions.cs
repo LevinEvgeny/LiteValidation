@@ -1,37 +1,25 @@
-﻿namespace LiteValidation;
+﻿using LiteValidation.Contracts;
 
-public class LiteValidatorRuleOptions<T> : ILiteValidatorRuleOptions<T>
+namespace LiteValidation;
+
+public class LiteValidatorRuleOptions<T> : ILiteValidatorRuleOptions<T>, ILiteValidatorRuleCheck<T>
 {
     private readonly List<Func<T, bool>> _conditions;
     private List<Func<T, bool>> _conditionsWhen;
     private Func<Exception> _getException;
-    private Action<T> _ruleCheck;
-    public Action<T> GetRuleCheck => _ruleCheck;
+    private RuleCheckTypeEnum _ruleCheckType;
 
-    public LiteValidatorRuleOptions()
+    public LiteValidatorRuleOptions(RuleCheckTypeEnum ruleCheckType)
     {
+        _ruleCheckType = ruleCheckType;
         _conditions = new List<Func<T, bool>>(4);
-        UseRuleCheckAll();
     }
 
-    public LiteValidatorRuleOptions(Func<ILiteValidatorRuleOptions<T>, ILiteValidatorRuleOptions<T>> getOptions)
+    public LiteValidatorRuleOptions(RuleCheckTypeEnum ruleCheckType, Func<ILiteValidatorRuleOptions<T>, ILiteValidatorRuleOptions<T>> getOptions)
     {
+        _ruleCheckType = ruleCheckType;
         _conditions = new List<Func<T, bool>>(4);
-        _ruleCheck = FuncCheckAll;
         getOptions(this);
-    }
-
-    protected void CheckSetup()
-    {
-        if (!_conditions.GetEnumerator().MoveNext())
-        {
-            throw new Exception("Нет условий для проверки");
-        }
-
-        if (_getException is null)
-        {
-            throw new Exception("Не указан exception для ошибки");
-        }
     }
 
     ILiteValidatorRuleOptions<T> ILiteValidatorRuleOptions<T>.Must(Func<T, bool> predicate)
@@ -58,19 +46,37 @@ public class LiteValidatorRuleOptions<T> : ILiteValidatorRuleOptions<T>
         return this;
     }
 
-    public ILiteValidatorRuleOptions<T> UseRuleCheckAny()
+    public void RuleCheck(T value)
     {
-        _ruleCheck = FuncCheckAny;
-        return this;
+        CheckSetup();
+
+        switch (_ruleCheckType)
+        {
+            case RuleCheckTypeEnum.CheckAll:
+                RuleCheckAll(value);
+                break;
+            case RuleCheckTypeEnum.CheckAny:
+                RuleCheckAny(value);
+                break;
+            default:
+                break;
+        }
     }
 
-    public ILiteValidatorRuleOptions<T> UseRuleCheckAll()
+    protected void CheckSetup()
     {
-        _ruleCheck = FuncCheckAll;
-        return this;
+        if (!_conditions.GetEnumerator().MoveNext())
+        {
+            throw new Exception("Нет условий для проверки");
+        }
+
+        if (_getException is null)
+        {
+            throw new Exception("Не указан exception для ошибки");
+        }
     }
 
-    void FuncCheckAny(T value)
+    private void RuleCheckAny(T value)
     {
         if (_conditionsWhen is not null)
         {
@@ -94,7 +100,7 @@ public class LiteValidatorRuleOptions<T> : ILiteValidatorRuleOptions<T>
         throw _getException();
     }
 
-    void FuncCheckAll(T value)
+    private void RuleCheckAll(T value)
     {
         if (_conditionsWhen is not null)
         {
